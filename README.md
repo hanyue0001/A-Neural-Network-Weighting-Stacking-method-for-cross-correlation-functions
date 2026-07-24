@@ -31,26 +31,6 @@ notebook form. It reads the versioned data under `syn_datasets/` and published
 weights under `syn_results/`; figure reproduction therefore does not retrain a
 stochastic model.
 
-## Metrics and reproducibility
-
-The training SNR loss uses both regions outside the signal window as noise.
-The figure metric `reported_snr` uses signal-window RMS divided by the RMS of
-a remote positive-lag tail window. The RMSR_SS comparison combines the
-pre-signal and remote-tail windows. All SNR-related calculations use RMS
-ratios; they are exposed as `training_rms_ratio`, `reported_snr`, and
-`selective_rms_ratio` so their noise-window definitions remain explicit.
-
-Run the test suite with:
-
-```bash
-python -m unittest discover -s tests -v
-```
-
-Data preprocessing (instrument correction, filtering, one-bit normalization,
-spectral whitening, windowing, and CCF construction) is outside this package.
-Inputs must already be preprocessed consistently with the experiment being
-reproduced.
-
 ## Repository layout
 
 - `src/nnws/`: model, losses, training, metrics, and figure APIs
