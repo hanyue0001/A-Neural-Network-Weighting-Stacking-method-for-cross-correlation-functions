@@ -39,32 +39,6 @@ notebook form. It reads the versioned data under `syn_datasets/` and published
 weights under `syn_results/`; figure reproduction therefore does not retrain a
 stochastic model.
 
-## Minimal use
-
-```python
-import numpy as np
-from nnws import TrainingConfig, apply_stacking_network, train
-
-ccfs = np.load("ccfs.npy")  # shape [M, N], with odd N
-result = train(
-    ccfs,
-    tau=tau,
-    tmin=tmin,
-    tmax=tmax,
-    sampling_rate=sampling_rate,
-    config=TrainingConfig(seed=0),
-)
-stack, weights = apply_stacking_network(result.model, ccfs)
-```
-
-The model accepts one CCF matrix with shape `[M, N]` or `[1, M, N]`.
-`sampling_rate` is expressed in Hz and defaults to `1.0`; `lag`, `tau`,
-`tmin`, and `tmax` are expressed in seconds. The legacy sampling-interval
-argument `delta` remains supported and must satisfy
-`delta = 1 / sampling_rate` when both are supplied. A trained model has a
-fixed `N`; the default training parameters are 200 epochs, Adam with learning
-rate `0.001`, and loss weights `0.8:0.2:0.01`.
-
 ## Metrics and reproducibility
 
 The training SNR loss uses both regions outside the signal window as noise.
