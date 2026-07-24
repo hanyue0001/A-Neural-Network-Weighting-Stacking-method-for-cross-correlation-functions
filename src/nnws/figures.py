@@ -10,8 +10,7 @@ import numpy as np
 
 from .metrics import (
     normalize_max_abs,
-    reported_peak_rms_ratio,
-    reported_tail_rms_ratio,
+    reported_snr,
     rmsr_selective_stacking,
 )
 from .stacking import weighted_stack
@@ -296,7 +295,7 @@ def make_test0_figure(root: str | Path = "."):
         normalize_max_abs(value) for value in (linear, selective, neural)
     ]
     snrs = [
-        reported_tail_rms_ratio(value, tau, tmin, tmax, delta)
+        reported_snr(value, tau, tmin, tmax, delta)
         for value in normalized
     ]
     correlations = [np.corrcoef(truth, value)[0, 1] for value in normalized]
@@ -371,7 +370,7 @@ def make_comprehensive_figure(root: str | Path = "."):
     names = ("test_azi40", "test_azi65", "test_azi90")
     loaded = [_load_synthetic(root, name) for name in names]
     tau, tmin, tmax, delta = 8, 64, 69, 1
-    # This panel follows the reference fig3_m.py wavelet and peak/RMS metric.
+    # This panel follows the reference fig3_m.py source-wavelet convention.
     truth = _filtered_ground_truth(wavelet="sigma2")
     figure, axes = plt.subplots(3, 3, figsize=(14.8, 12))
     panel_labels = (("(a)", "(b)", "(c)"), ("(d)", "(e)", "(f)"), ("(g)", "(h)", "(i)"))
@@ -439,7 +438,7 @@ def make_comprehensive_figure(root: str | Path = "."):
             normalize_max_abs(value) for value in (linear, selective, neural)
         ]
         snrs = [
-            reported_peak_rms_ratio(value, tau, tmin, tmax, delta)
+            reported_snr(value, tau, tmin, tmax, delta)
             for value in normalized
         ]
         correlations = [np.corrcoef(truth, value)[0, 1] for value in normalized]

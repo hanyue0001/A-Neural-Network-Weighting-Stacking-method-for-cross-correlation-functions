@@ -34,17 +34,16 @@ stochastic model.
 ## Metrics and reproducibility
 
 The training SNR loss uses both regions outside the signal window as noise.
-The figure metric historically called `ratio4` uses a remote positive-lag tail
-window, the comprehensive figure reports peak amplitude over remote-tail RMS,
-and the RMSR_SS comparison combines the pre-signal and remote-tail windows.
-They are intentionally exposed as `training_rms_ratio`,
-`reported_tail_rms_ratio`, `reported_peak_rms_ratio`, and
-`selective_rms_ratio` so the definitions cannot be confused.
+The figure metric `reported_snr` uses signal-window RMS divided by the RMS of
+a remote positive-lag tail window. The RMSR_SS comparison combines the
+pre-signal and remote-tail windows. All SNR-related calculations use RMS
+ratios; they are exposed as `training_rms_ratio`, `reported_snr`, and
+`selective_rms_ratio` so their noise-window definitions remain explicit.
 
 Run the test suite with:
 
 ```bash
-pytest
+python -m unittest discover -s tests -v
 ```
 
 Data preprocessing (instrument correction, filtering, one-bit normalization,

@@ -59,7 +59,7 @@ def training_rms_ratio(
     return rms(symmetric[start:stop]) / rms(noise)
 
 
-def reported_tail_rms_ratio(
+def reported_snr(
     data: ArrayLike,
     tau: float,
     tmin: float,
@@ -67,7 +67,7 @@ def reported_tail_rms_ratio(
     delta: float | None = None,
     sampling_rate: float = 1.0,
 ) -> float:
-    """Published figure metric using the remote positive-lag tail as noise."""
+    """Reported SNR as signal-window RMS / remote-tail noise RMS."""
     delta, _ = resolve_sampling(delta, sampling_rate)
     symmetric = get_symmetric_component(data)
     start, stop = _window_indices(len(symmetric), tau, tmin, tmax, delta)
@@ -77,26 +77,6 @@ def reported_tail_rms_ratio(
     if tail.size == 0:
         raise ValueError("The reported tail-noise window is empty.")
     return rms(symmetric[start:stop]) / rms(tail)
-
-
-def reported_peak_rms_ratio(
-    data: ArrayLike,
-    tau: float,
-    tmin: float,
-    tmax: float,
-    delta: float | None = None,
-    sampling_rate: float = 1.0,
-) -> float:
-    """Peak signal amplitude / remote-tail RMS used by the comprehensive figure."""
-    delta, _ = resolve_sampling(delta, sampling_rate)
-    symmetric = get_symmetric_component(data)
-    start, stop = _window_indices(len(symmetric), tau, tmin, tmax, delta)
-    tau_idx = int(tau / delta)
-    tmax_idx = int(tmax / delta)
-    tail = symmetric[tmax_idx + 4 * tau_idx : tmax_idx + 8 * tau_idx]
-    if tail.size == 0:
-        raise ValueError("The reported tail-noise window is empty.")
-    return float(np.max(symmetric[start:stop])) / rms(tail)
 
 
 def selective_rms_ratio(
@@ -153,9 +133,7 @@ def rmsr_selective_stacking(
     return linear, selective, selected
 
 
-# Compatibility aliases. Their names are retained while their documentation is
-# explicit about which metric is used.
+# Compatibility aliases for the RMSR_SS baseline and normalization helper.
 norm = normalize_max_abs
 calculate_rms_ratio = selective_rms_ratio
-ratio4 = reported_tail_rms_ratio
 rmsr_ss = rmsr_selective_stacking

@@ -22,6 +22,19 @@ class LossTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             SNRLoss(tau=2, tmin=2, tmax=4)(torch.ones(1, 9))
 
+    def test_snr_loss_is_noise_rms_over_signal_rms(self):
+        positive_branch = torch.arange(1.0, 22.0)
+        signal = torch.cat(
+            (torch.flip(positive_branch[1:], dims=(0,)), positive_branch)
+        ).unsqueeze(0)
+        result = SNRLoss(tau=1, tmin=4, tmax=6, eps=0)(signal)
+        symmetric = 2 * positive_branch
+        signal_rms = torch.sqrt(torch.mean(symmetric[2:8] ** 2))
+        noise_rms = torch.sqrt(
+            torch.mean(torch.cat((symmetric[:2], symmetric[8:])) ** 2)
+        )
+        torch.testing.assert_close(result, noise_rms / signal_rms)
+
 
 if __name__ == "__main__":
     unittest.main()

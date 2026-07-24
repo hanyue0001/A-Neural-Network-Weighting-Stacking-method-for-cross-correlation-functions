@@ -5,6 +5,7 @@ import numpy as np
 from nnws import (
     get_symmetric_component,
     normalize_max_abs,
+    reported_snr,
     training_rms_ratio,
 )
 
@@ -29,6 +30,20 @@ class MetricsTest(unittest.TestCase):
             signal, tau=1, tmin=3, tmax=5, delta=0.5
         )
         self.assertAlmostEqual(with_rate, with_delta)
+
+    def test_reported_snr_uses_signal_rms_not_signal_peak(self):
+        positive_branch = np.arange(1.0, 22.0)
+        signal = np.concatenate((positive_branch[:0:-1], positive_branch))
+        result = reported_snr(signal, tau=1, tmin=4, tmax=6)
+        symmetric = 2 * positive_branch
+        expected = np.sqrt(np.mean(symmetric[2:8] ** 2)) / np.sqrt(
+            np.mean(symmetric[10:14] ** 2)
+        )
+        peak_ratio = np.max(symmetric[2:8]) / np.sqrt(
+            np.mean(symmetric[10:14] ** 2)
+        )
+        self.assertAlmostEqual(result, expected)
+        self.assertNotAlmostEqual(result, peak_ratio)
 
 
 if __name__ == "__main__":
