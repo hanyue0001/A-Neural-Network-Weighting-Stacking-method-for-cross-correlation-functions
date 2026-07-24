@@ -10,14 +10,6 @@ N → 512 → 256 → 128 → 64 → 16 → 1,
 
 whose sigmoid output is its stacking weight.
 
-This release makes two formula-level corrections to the earlier research
-script:
-
-1. The stack is the normalized weighted mean
-   `S = sum(w_i * d_i) / sum(w_i)`, not an unnormalized weighted sum.
-2. The symmetry loss is consistently defined and named as anti-symmetric RMS
-   divided by symmetric-component RMS.
-
 ## Installation
 
 Create an environment with Python 3.10 or newer, then install the package:
