@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use NNWS, please cite the associated article and this software."
+title: "NNWS: Neural Network Weighting Stacking"
+type: software
+version: 0.1.0
+date-released: 2026-07-24
+authors:
+  - name: "NNWS contributors"
+repository-code: "https://github.com/Guiqifan/A-Neural-Network-Weighting-Stacking-method-for-cross-correlation-functions"
+license: MIT
