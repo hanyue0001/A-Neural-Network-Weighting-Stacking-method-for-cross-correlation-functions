@@ -26,11 +26,6 @@ python -m pip install -e ".[figures]"
 nnws-figures --root . --figures all
 ```
 
-The repository's `Figures.ipynb` provides the same three figure workflows in
-notebook form. It reads the versioned data under `syn_datasets/` and published
-weights under `syn_results/`; figure reproduction therefore does not retrain a
-stochastic model.
-
 ## Repository layout
 
 - `src/nnws/`: model, losses, training, metrics, and figure APIs
