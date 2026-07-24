@@ -48,10 +48,10 @@ from nnws import TrainingConfig, apply_stacking_network, train
 ccfs = np.load("ccfs.npy")  # shape [M, N], with odd N
 result = train(
     ccfs,
-    tau=8,
-    tmin=64,
-    tmax=69,
-    sampling_rate=1.0,
+    tau=tau,
+    tmin=tmin,
+    tmax=tmax,
+    sampling_rate=sampling_rate,
     config=TrainingConfig(seed=0),
 )
 stack, weights = apply_stacking_network(result.model, ccfs)
